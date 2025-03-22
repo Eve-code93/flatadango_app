@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flatdango - Buy Movie Tickets</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <header>
+        <h1>🎬 <span class="brand">FLATDANGO</span></h1>
+        <p>BUY MOVIE TICKETS</p>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Movie List Section -->
+        <section id="movie-list">
+            <h2>Available Movies</h2>
+            <ul id="movies">
+                <!-- Movie titles will be dynamically added here -->
+            </ul>
+        </section>
+
+        <!-- Movie Details Section -->
+        <section id="movie-details">
+            <img id="movie-poster" src="images/placeholder.png" alt="Movie Poster">
+            <div class="details">
+                <h2 id="movie-title">[MOVIE TITLE]</h2>
+                <p><strong>Runtime:</strong> <span id="movie-runtime">[RUNTIME]</span> minutes</p>
+                <p id="movie-description">[INSERT MOVIE DESCRIPTION HERE]</p>
+                <p><strong>Showtime:</strong> <span id="movie-showtime">[SHOWTIME]</span></p>
+                <p><strong>Tickets Left:</strong> <span id="movie-tickets">[X]</span></p>
+                <button id="buy-ticket">Buy Ticket</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- JavaScript File -->
+    <script src="js/script.js"></script>
+
+</body>
+</html>
