@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const API_URL = "http://localhost:4000/films"; // Correct API URL
-
+    const API_URL = "http://localhost:4000/films";
     const movieList = document.getElementById("movies");
     const movieTitle = document.getElementById("movie-title");
     const movieRuntime = document.getElementById("movie-runtime");
@@ -8,42 +7,105 @@ document.addEventListener("DOMContentLoaded", function () {
     const movieShowtime = document.getElementById("movie-showtime");
     const movieTickets = document.getElementById("movie-tickets");
     const moviePoster = document.getElementById("movie-poster");
+    const buyButton = document.getElementById("buy-ticket");
+    const deleteButton = document.createElement("button"); 
 
-    // Fetch movies from db.json
-    fetch(API_URL)
-        .then(response => response.json())
-        .then(movies => {
-            if (!movies.length) {
-                console.error("No movies found in the database.");
-                return;
+    let selectedMovie = null; 
+
+    deleteButton.textContent = "Delete Movie";
+    deleteButton.id = "delete-movie";
+    deleteButton.style.marginTop = "10px";
+    buyButton.insertAdjacentElement("afterend", deleteButton);
+
+    
+    function fetchMovies() {
+        fetch(API_URL)
+            .then(response => response.json())
+            .then(movies => {
+                movieList.innerHTML = ""; 
+                if (!movies.length) {
+                    console.error("No movies found.");
+                    return;
+                }
+                movies.forEach(movie => addMovieToList(movie));
+                displayMovieDetails(movies[0]); 
+            })
+            .catch(error => console.error("Error fetching movies:", error));
+    }
+
+    
+    function addMovieToList(movie) {
+        const li = document.createElement("li");
+        li.textContent = movie.title;
+        li.dataset.id = movie.id;
+        li.classList.add("film-item");
+        li.addEventListener("click", () => displayMovieDetails(movie));
+        movieList.appendChild(li);
+    }
+
+    
+    function displayMovieDetails(movie) {
+        selectedMovie = movie;
+        movieTitle.textContent = movie.title;
+        movieRuntime.textContent = `Runtime: ${movie.runtime} minutes`;
+        movieDescription.textContent = movie.description;
+        movieShowtime.textContent = `Showtime: ${movie.showtime}`;
+        movieTickets.textContent = `Tickets Left: ${movie.capacity - movie.tickets_sold}`;
+        moviePoster.src = movie.poster;
+        updateBuyButton(movie);
+    }
+
+    
+    function updateBuyButton(movie) {
+        let availableTickets = movie.capacity - movie.tickets_sold;
+        if (availableTickets === 0) {
+            buyButton.textContent = "Sold Out";
+            buyButton.disabled = true;
+        } else {
+            buyButton.textContent = "Buy Ticket";
+            buyButton.disabled = false;
+        }
+    }
+
+   
+    buyButton.addEventListener("click", () => {
+        if (!selectedMovie) return;
+
+        let availableTickets = selectedMovie.capacity - selectedMovie.tickets_sold;
+        if (availableTickets > 0) {
+            selectedMovie.tickets_sold += 1;
+            movieTickets.textContent = `Tickets Left: ${availableTickets - 1}`;
+            if (availableTickets - 1 === 0) {
+                buyButton.textContent = "Sold Out";
+                buyButton.disabled = true;
             }
 
-            movies.forEach(movie => {
-                const li = document.createElement("li");
-                li.textContent = movie.title;
-                li.dataset.id = movie.id;
-                movieList.appendChild(li);
+           
+            fetch(`${API_URL}/${selectedMovie.id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ tickets_sold: selectedMovie.tickets_sold }),
+            })
+            .catch(error => console.error("Error updating tickets:", error));
+        }
+    });
 
-                // Display first movie by default
-                if (movie.id === movies[0].id) {
-                    displayMovieDetails(movie);
-                }
+    
+    deleteButton.addEventListener("click", () => {
+        if (!selectedMovie) return;
 
-                // Click event to show movie details
-                li.addEventListener("click", () => displayMovieDetails(movie));
-            });
+        fetch(`${API_URL}/${selectedMovie.id}`, {
+            method: "DELETE",
         })
-        .catch(error => console.error("Error fetching movies:", error));
+        .then(() => {
+            document.querySelector(`[data-id="${selectedMovie.id}"]`).remove(); // Remove from UI
+            alert("Movie deleted!");
+            fetchMovies(); 
+        })
+        .catch(error => console.error("Error deleting movie:", error));
+    });
 
-    // Function to display movie details
-    function displayMovieDetails(movie) {
-        movieTitle.textContent = movie.title;
-        movieRuntime.textContent = movie.runtime;
-        movieDescription.textContent = movie.description;
-        movieShowtime.textContent = movie.showtime;
-        movieTickets.textContent = movie.capacity - movie.tickets_sold;
-        moviePoster.src = movie.poster;
-    }
+    fetchMovies(); 
 });
 
 

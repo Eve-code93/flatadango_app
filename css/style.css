@@ -1,4 +1,4 @@
-/* General Styles */
+
 body {
     font-family: Arial, sans-serif;
     background-color: #e0e0e0;
@@ -6,7 +6,7 @@ body {
     padding: 0;
 }
 
-/* Header */
+
 header {
     background-color: #222;
     color: white;
@@ -24,14 +24,14 @@ header p {
     font-size: 14px;
 }
 
-/* Layout */
+
 main {
     display: flex;
     padding: 20px;
     justify-content: space-around;
 }
 
-/* Movie List */
+
 aside {
     width: 30%;
     background: #ccc;
@@ -57,7 +57,19 @@ aside h2 {
     cursor: pointer;
 }
 
-/* Movie Details */
+.film-item {
+    cursor: pointer; 
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.film-item:hover {
+    background-color: #ffcc00; /
+    color: #000; 
+    font-weight: bold; 
+    transform: scale(1.05);
+}
+
+
 #movie-details {
     width: 60%;
     background: white;
@@ -100,7 +112,7 @@ button#buy-ticket:disabled {
     cursor: not-allowed;
 }
 
-/* Sold Out */
+
 .sold-out {
     text-decoration: line-through;
     color: red;
