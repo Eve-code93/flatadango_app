@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const API_URL = "http://localhost:4000/films";
+    const API_URL = "https://flatadango-app-1.onrender.com/films";
+    ;
     const movieList = document.getElementById("movies");
     const movieTitle = document.getElementById("movie-title");
     const movieRuntime = document.getElementById("movie-runtime");
