@@ -1,0 +1,12 @@
+{
+  "name": "flatadango-api",
+  "version": "1.0.0",
+  "description": "A simple JSON server for Flatdango app",
+  "main": "server.js",
+  "scripts": {
+    "start": "json-server --watch db.json --port 4000"
+  },
+  "dependencies": {
+    "json-server": "^0.17.0"
+  }
+}
